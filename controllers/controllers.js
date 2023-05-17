@@ -45,8 +45,8 @@ async uploadProperty(req, res) {
         }
   
         // Get property details from request body
-        const { name, bathrooms, bedrooms, area, price, location } = req.body;
-        if(!name , !bathrooms , !bedrooms , !area , !price , !location){
+        const { name, bathrooms, bedrooms, area, price, location,phone, email,whatsapp} = req.body;
+        if(!name , !bathrooms , !bedrooms , !area , !price , !location ,!phone , !email ,!whatsapp ){
           return res.send({message: "Please enter all requied fields"});
         }
   
@@ -58,6 +58,9 @@ async uploadProperty(req, res) {
           area,
           price,
           location,
+          phone, 
+          email,
+          whatsapp,
           imageName: req.file.filename // Save the image name in the imageName field
         });
   
@@ -72,7 +75,7 @@ async uploadProperty(req, res) {
     }
 },
 
-  async getproperty(req ,res) {
+async getproperty(req ,res) {
     try{
         const property = await Property.find();
         if(property.length == 0){
@@ -89,6 +92,9 @@ async uploadProperty(req, res) {
 
 
 },
+
+
+
  getImage(req,res) {
   try{
     const { imagename } = req.params;
@@ -104,6 +110,8 @@ async uploadProperty(req, res) {
     console.log(e);
   }
 },
+
+
 
 async signIn(req, res) {
 
@@ -139,6 +147,8 @@ async signIn(req, res) {
       }
 },
 
+
+
 async SignUp(req, res){
       try {
         const { name, email, password , country, city} = req.body;
@@ -172,6 +182,26 @@ async SignUp(req, res){
         console.error(err);
         res.status(500).send('Server error');
       }
+},
+ 
+async getpropertybyName (req, res){
+  try{
+    const {propertyname} = req.params;
+
+  const property = await Property.find({name : propertyname});
+  if(property.length == 0){
+    return res.status(200).json({message : "No Property Found By That Name"});
+  }
+  return res.status(200).json({property});
+
+  }
+  catch(e){
+    console.log(e);
+    return res.status(500).json({message : e});
+  }
+  
+
+
 }
 
 

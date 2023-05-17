@@ -16,6 +16,8 @@ router.get("/getImage/:imagename", controller.getImage);
 router.post("/SignIn" , controller.signIn);
 //for signUp
 router.post("/SignUp" , controller.SignUp);
+//find prperty by name
+router.get("/getpropertybyname/:propertyname" , controller.getpropertybyName);
 
 
   

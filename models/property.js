@@ -28,7 +28,18 @@ const propertySchema = new mongoose.Schema({
   }, 
   imageName: {
     type : String
+  },
+  phone: {
+    type : String
+  },
+  email: {
+    type : String
+  },
+  whatsapp: {
+    type : String
   }
+  
+
 });
 
 const Property = mongoose.model('Property', propertySchema);
