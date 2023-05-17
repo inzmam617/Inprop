@@ -12,7 +12,11 @@ router.post("/uploadproperty", controller.uploadProperty);
 router.get("/getproperty" , controller.getproperty);
 //for getting image
 router.get("/getImage/:imagename", controller.getImage);
+//for signIn
+router.post("/SignIn" , controller.signIn);
+//for signUp
+router.post("/SignUp" , controller.SignUp);
 
 
-
+  
 module.exports = router;

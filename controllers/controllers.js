@@ -1,6 +1,10 @@
-const Property = require("../models/property")
+const Property = require("../models/property");
+const User = require("../models/User");
+
 const path = require("path");
 const fs = require("fs");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 const multer = require('multer');
@@ -20,7 +24,8 @@ const upload = multer({ storage: storage });
 
 
 const controller = {
-  async uploadProperty(req, res) {
+
+async uploadProperty(req, res) {
     try {
       // File upload middleware
       upload.single('image')(req, res, async (err) => {
@@ -65,7 +70,7 @@ const controller = {
       console.error(err);
       return res.status(500).json({ message: "Error uploading property" });
     }
-  },
+},
 
   async getproperty(req ,res) {
     try{
@@ -84,7 +89,7 @@ const controller = {
 
 
 },
-async getImage(req,res) {
+ getImage(req,res) {
   try{
     const { imagename } = req.params;
     console.log(imagename);
@@ -98,6 +103,75 @@ async getImage(req,res) {
   catch(e){
     console.log(e);
   }
+},
+
+async signIn(req, res) {
+
+      try {
+        const { email, password } = req.body;
+        if(!email ,!password){
+          return res.status(200).json({message : "Please enter all requied fields"});
+        }
+    
+        const user = await User.findOne({ email });
+        // console.log(user);
+    
+        if (!user) {
+          return res.status(401).send('Invalid email or password');
+        }
+        if (!user._id) {
+          return res.status(401).send('User Already logged In');
+        }
+    
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+    
+        if (!isPasswordValid) {
+          return res.status(401).send('Invalid email or password');
+        }
+    
+        const token = jwt.sign({ userId: user._id }, 'mysecretkey');
+    
+        res.json({ token, email, password, userId: user._id });
+    
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+      }
+},
+
+async SignUp(req, res){
+      try {
+        const { name, email, password , country, city} = req.body;
+        if(!name , !email , !password , !country , !city){
+          return res.status(200).json({message : "Missing required fields"});
+        }
+        // Check if user already exists with provided email
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+          return res.status(400).json({ message: 'User already exists with this email' });
+        }     
+        
+     
+        const hashedPassword = await bcrypt.hash(password, 10);
+    
+        const user = new User({
+          name,
+          email,
+          country,
+          city,
+          password: hashedPassword,
+        });
+    
+        await user.save();
+    
+        const token = jwt.sign({ userId: user._id }, 'mysecretkey');
+    
+        res.json({ token, userId: user._id });
+
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+      }
 }
 
 
