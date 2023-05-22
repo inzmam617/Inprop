@@ -12,6 +12,9 @@ const router = require('./routes/routes');
 const port = 6222
 // const multer = require('multer');
 
+app.get("/" , (req ,res) => {
+    res.status(200).json({message :  "The server is ruuning"});
+})
 
 app.use(express.json());
 
