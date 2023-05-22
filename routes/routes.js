@@ -3,7 +3,7 @@ const controller = require("../controllers/controllers")
 
 
 
-const router = express.Router();
+const router = express.Router(); 
 
 
 //for posting property
