@@ -86,7 +86,7 @@ async getproperty(req ,res) {
         
     }
     catch(E){
-        console.log(E);
+        console.log(E); 
     }
 
 

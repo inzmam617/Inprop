@@ -9,7 +9,7 @@ const dbconnect =  async function connect(){
       console.log('Connected to MongoDB!');
     } catch (err) {
       console.error(err);
-    }
+    } 
     
 app.get('/', (req, res) => res.send('Hello World!'))
   }
